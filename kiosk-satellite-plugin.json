@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "id": "ha-outfit-clock",
+  "name": "Zegar HA Outfit",
+  "version": "1.7.1",
+  "apiVersion": 1,
+  "minAndroidSdk": 24,
+  "entryClass": "pl.piotrek.kiosk.ClockPlugin",
+  "description": "Lokalny wygaszacz z zegarem Outfit, polską datą, temperaturą i animowanymi ikonami pogody z Home Assistant.",
+  "author": "Piotrek",
+  "license": "Apache-2.0",
+  "capabilities": [
+    "screensaver",
+    "host.read"
+  ],
+  "settings": [
+    {
+      "key": "temperatureEntity",
+      "title": "Encja temperatury",
+      "type": "entity",
+      "default": "sensor.zewnetrzny_temperature",
+      "group": "Home Assistant",
+      "description": "Czujnik temperatury lub encja weather (atrybut temperature). Jednostka pochodzi z encji."
+    },
+    {
+      "key": "weatherEntity",
+      "title": "Encja warunków pogodowych",
+      "type": "entity",
+      "default": "weather.openweathermap",
+      "group": "Home Assistant",
+      "description": "Stan określa ikonę. cloudy i cloud_coverage powyżej 80% wybiera overcast."
+    },
+    {
+      "key": "sunEntity",
+      "title": "Encja słońca",
+      "type": "entity",
+      "default": "sun.sun",
+      "group": "Home Assistant",
+      "description": "above_horizon / below_horizon wybiera dzień/noc. Po wyczyszczeniu decyduje stan pogody."
+    },
+    {
+      "key": "decimals",
+      "title": "Miejsca po przecinku temperatury",
+      "type": "select",
+      "default": "1",
+      "options": [
+        "0",
+        "1"
+      ],
+      "group": "Home Assistant"
+    },
+    {
+      "key": "clockSize",
+      "title": "Rozmiar zegara",
+      "type": "number",
+      "default": 100,
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "group": "Rozmiary"
+    },
+    {
+      "key": "dateSize",
+      "title": "Rozmiar daty",
+      "type": "number",
+      "default": 100,
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "group": "Rozmiary"
+    },
+    {
+      "key": "temperatureSize",
+      "title": "Rozmiar temperatury",
+      "type": "number",
+      "default": 100,
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "group": "Rozmiary"
+    },
+    {
+      "key": "iconSize",
+      "title": "Rozmiar ikony pogody",
+      "type": "number",
+      "default": 100,
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "group": "Rozmiary"
+    },
+    {
+      "key": "clockColor",
+      "title": "Kolor zegara",
+      "type": "color",
+      "default": "#FFFFFF",
+      "group": "Kolory"
+    },
+    {
+      "key": "dateColor",
+      "title": "Kolor daty i komunikatów",
+      "type": "color",
+      "default": "#A0A0A0",
+      "group": "Kolory"
+    },
+    {
+      "key": "temperatureColor",
+      "title": "Kolor temperatury",
+      "type": "color",
+      "default": "#FFFFFF",
+      "group": "Kolory"
+    },
+    {
+      "key": "backgroundColor",
+      "title": "Kolor tła",
+      "type": "color",
+      "default": "#000000",
+      "group": "Kolory"
+    },
+    {
+      "key": "highlightOnes",
+      "title": "Wyróżniaj jedynki w godzinach",
+      "type": "boolean",
+      "default": true,
+      "group": "Jedynki w godzinie",
+      "description": "Tylko część HH. Minuty zachowują kolor zegara."
+    },
+    {
+      "key": "oneColor",
+      "title": "Kolor cyfry 1",
+      "type": "color",
+      "default": "#FF0000",
+      "group": "Jedynki w godzinie"
+    },
+    {
+      "key": "infoEntity1",
+      "title": "Pozycja 1 — encja",
+      "type": "entity",
+      "default": "",
+      "group": "Ikony informacyjne",
+      "description": "Pusta encja ukrywa pozycję. Obsługa zamków, bram i czujników otwarcia; pozostałe encje pokazują swój stan."
+    },
+    {
+      "key": "infoEntity2",
+      "title": "Pozycja 2 — encja",
+      "type": "entity",
+      "default": "",
+      "group": "Ikony informacyjne",
+      "description": "Pusta encja ukrywa pozycję. Obsługa zamków, bram i czujników otwarcia; pozostałe encje pokazują swój stan."
+    },
+    {
+      "key": "infoEntity3",
+      "title": "Pozycja 3 — encja",
+      "type": "entity",
+      "default": "",
+      "group": "Ikony informacyjne",
+      "description": "Pusta encja ukrywa pozycję. Obsługa zamków, bram i czujników otwarcia; pozostałe encje pokazują swój stan."
+    },
+    {
+      "key": "infoEntity4",
+      "title": "Pozycja 4 — encja",
+      "type": "entity",
+      "default": "",
+      "group": "Ikony informacyjne",
+      "description": "Pusta encja ukrywa pozycję. Obsługa zamków, bram i czujników otwarcia; pozostałe encje pokazują swój stan."
+    },
+    {
+      "key": "infoEntity5",
+      "title": "Pozycja 5 — encja",
+      "type": "entity",
+      "default": "",
+      "group": "Ikony informacyjne",
+      "description": "Pusta encja ukrywa pozycję. Obsługa zamków, bram i czujników otwarcia; pozostałe encje pokazują swój stan."
+    },
+    {
+      "key": "infoLayout",
+      "title": "Nazwy, ikony i wygląd pięciu pozycji",
+      "type": "string",
+      "default": "layout=left;Brama|100|100;Zamek wejściowy|100|100;Pozycja 3|100|100;Pozycja 4|100|100;Pozycja 5|100|100",
+      "group": "Ikony informacyjne",
+      "description": "Układ po lewej lub na dole wybierz w konfigurator-ikon.html, potem wklej wynik. Prefiks layout=left; lub layout=bottom; przed pięcioma pozycjami. Stare ustawienia zachowują dolny rząd."
+    }
+  ],
+  "commands": [],
+  "groups": [
+    {
+      "title": "Home Assistant"
+    },
+    {
+      "title": "Rozmiary"
+    },
+    {
+      "title": "Kolory"
+    },
+    {
+      "title": "Jedynki w godzinie"
+    },
+    {
+      "title": "Ikony informacyjne"
+    }
+  ]
+}
