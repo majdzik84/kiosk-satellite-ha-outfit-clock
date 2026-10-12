@@ -1,0 +1,86 @@
+<!doctype html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ustawienia ikon — Zegar HA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111827;color:#f1f5f9;font:16px system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px 20px}h1{margin-top:0}p{color:#cbd5e1;line-height:1.5}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.card{background:#1e293b;padding:20px;border-radius:14px}label{display:block;margin:14px 0 6px;color:#cbd5e1;font-size:14px}input,textarea,button{font:inherit}input[type=text],textarea{width:100%;padding:10px;border:1px solid #475569;border-radius:6px;background:#0f172a;color:white}input[type=range]{width:100%}input[type=color]{width:70px;height:40px;border:0;background:none}.colors{display:flex;gap:20px}.previews{display:flex;justify-content:center;gap:48px;margin-top:20px}.preview{text-align:center}.preview svg{display:block;margin:0 auto 8px}small{color:#94a3b8}button{cursor:pointer;padding:10px 16px;border:0;border-radius:7px;background:#38bdf8;color:#082f49;margin:10px 10px 0 0}textarea{margin-top:8px;min-height:90px}#notice{color:#fbbf24}.output{margin-top:28px;padding:20px;background:#1e293b;border-radius:14px}
+</style><main><h1>Ikony informacyjne</h1><p>Ustaw nazwy, ikony, rozmiary i kolory pięciu pozycji. Encje wybierasz w KioskSatellite. Na końcu skopiuj wynik do pola <strong>Nazwy, ikony i wygląd pięciu pozycji</strong> w pluginie. Pusta ikona oznacza wybór automatyczny z HA.</p><div class="cards" id="cards"></div><datalist id="icon-list"></datalist><div class="output"><label for="import">Dotychczasowe ustawienia (opcjonalnie)</label><textarea id="import" placeholder="Wklej bieżącą wartość pola z pluginu"></textarea><button id="load">Wczytaj ustawienia</button><label for="result">Gotowe ustawienia do wklejenia</label><textarea id="result" readonly></textarea><div id="notice"></div><button id="copy">Kopiuj ustawienia</button><small id="copied"></small></div></main>
+<script>
+const mdiIcons=%MDI_JSON%;
+const customIcons=%CUSTOM_JSON%;
+const showIcons=document.createElement('input');showIcons.type='checkbox';showIcons.checked=true;showIcons.id='show-icons';
+const showLabel=document.createElement('label');showLabel.append(showIcons,document.createTextNode(' Pokaż ikony informacyjne'));
+document.getElementById('cards').before(showLabel);showIcons.addEventListener('change',update);
+const visibilityNotice=document.createElement('p');visibilityNotice.setAttribute('role','status');showLabel.after(visibilityNotice);
+const activeOnly=document.createElement('input');activeOnly.type='checkbox';activeOnly.id='active-only';
+const activeLabel=document.createElement('label');activeLabel.append(activeOnly,document.createTextNode(' Pokaż cały pasek, gdy co najmniej jedna encja jest aktywna'));
+showLabel.after(activeLabel);activeOnly.addEventListener('change',update);
+const position=document.createElement('select');position.id='position';
+position.innerHTML='<option value="left">Po lewej — pionowo</option><option value="bottom">Na dole — w rzędzie</option>';
+position.style.cssText='font:inherit;padding:10px;background:#0f172a;color:white;border:1px solid #475569;border-radius:6px;max-width:100%';
+const positionLabel=document.createElement('label');positionLabel.textContent='Położenie ikon';positionLabel.htmlFor='position';
+const cardsContainer=document.getElementById('cards');cardsContainer.before(positionLabel,position);position.style.marginBottom='24px';
+position.addEventListener('change',update);
+const cards=document.getElementById('cards'),rows=[];
+const fallback=mdiIcons['checkbox-blank-circle-outline'];
+for(let i=0;i<5;i++) {
+ const el=document.createElement('section');el.className='card';
+ el.innerHTML='<h2>Pozycja '+(i+1)+'</h2><label>Nazwa na ekranie<input type="text" class="name" maxlength="60" placeholder="Pusta: nazwa z HA"></label><label>Ikona (pusta: automatyczna z HA)<input type="text" class="icon" list="icon-list" placeholder="np. mdi:gate" maxlength="80"></label><label>Rozmiar ikony: <output class="iconValue"></output>%<input type="range" class="iconSize" min="50" max="200" step="5" value="100"></label><label>Rozmiar nazwy: <output class="textValue"></output>%<input type="range" class="textSize" min="50" max="200" step="5" value="100"></label><div class="colors"><label>Aktywny<input type="color" class="active" value="#ff4b4b"></label><label>Nieaktywny<input type="color" class="inactive" value="#444444"></label></div><div class="previews"><div class="preview activePreview"></div><div class="preview inactivePreview"></div></div><small class="hint"></small>';
+ cards.appendChild(el);rows.push(el);
+ const pickerLabel=document.createElement('label');pickerLabel.textContent='Własne delikatne ikony';
+ const picker=document.createElement('select');picker.style.cssText=position.style.cssText;
+ picker.innerHTML='<option value="">Wybierz własną ikonę…</option>'+Object.entries(customIcons).map(([key,icon])=>'<option value="'+key+'">'+icon.name+'</option>').join('');
+ const applyPicker=()=>{el.querySelector('.icon').value=picker.value;update();};
+ // input fires before change and bubbles to the card: synchronize before its refresh.
+ picker.addEventListener('input',applyPicker);
+ picker.addEventListener('change',applyPicker);
+ pickerLabel.appendChild(picker);el.querySelector('.icon').parentElement.after(pickerLabel);
+ el.addEventListener('input',update);
+ el.querySelector('.icon').addEventListener('input',e=>{
+  const search=e.target.value.replace(/^mdi:/,'').toLowerCase();const list=document.getElementById('icon-list');list.textContent='';
+  Object.keys(mdiIcons).filter(name=>name.includes(search)).slice(0,40).forEach(name=>{const option=document.createElement('option');option.value='mdi:'+name;list.appendChild(option);});
+ });
+}
+function update(){
+ activeOnly.disabled=!showIcons.checked;
+ visibilityNotice.textContent=showIcons.checked?(activeOnly.checked?'Cały pasek pojawia się, gdy choć jedna encja jest aktywna — nieaktywne ikony też są widoczne. Gdy wszystkie są nieaktywne, zegar zajmuje pełną szerokość. Wklej wynik do pluginu 1.7.1 lub nowszego.':'Ikony informacyjne są włączone. Zmiany zastosujesz, wklejając wynik do pluginu.'):'Ikony informacyjne są wyłączone. Wklej wynik do pluginu 1.6.1 lub nowszego, aby ukryć je na tablecie. Encje i wygląd pozostają zapisane.';
+ document.querySelectorAll('.previews').forEach(preview=>{preview.style.display=showIcons.checked?'flex':'none';});
+ const output=[];let invalid=false;
+ rows.forEach((row,i)=>{
+  const get=key=>row.querySelector('.'+key).value;
+  const name=get('name'),icon=get('icon').trim().replace(/^mdi:/,'');
+  const path=mdiIcons[icon]||fallback;
+  const custom=customIcons[icon];
+  row.querySelector('select').value=custom?icon:'';
+  row.querySelector('.iconValue').textContent=get('iconSize');row.querySelector('.textValue').textContent=get('textSize');
+  row.querySelector('.hint').textContent=custom ? (icon==='custom:lock'?'Podgląd: odryglowany / zaryglowany. Stan pochodzi z HA.':'Podgląd: otwarta / zamknięta. HA: open/on = otwarta, closed/off = zamknięta.') : (icon&&!mdiIcons[icon] ? 'Nieznana ikona — sprawdź nazwę.' : (!icon ? 'Podgląd ogólny. Na wygaszaczu zostanie użyta ikona HA.' : ''));
+  ['active','inactive'].forEach(state=>{
+   const preview=row.querySelector('.'+state+'Preview');preview.textContent='';
+   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.style.width=svg.style.height=(36*Number(get('iconSize'))/100)+'px';
+   const glyph=document.createElementNS('http://www.w3.org/2000/svg','path');glyph.setAttribute('d',path);glyph.setAttribute('fill',get(state));svg.appendChild(glyph);preview.appendChild(svg);
+   if(custom){
+    svg.setAttribute('viewBox','0 0 64 64');glyph.setAttribute('fill','none');glyph.setAttribute('stroke',get(state));glyph.setAttribute('stroke-width','1.15');
+    glyph.setAttribute('d',state==='active'?custom.open:custom.closed);
+    if(custom.post){const post=document.createElementNS('http://www.w3.org/2000/svg','path');post.setAttribute('d',custom.post);post.setAttribute('stroke',get(state));post.setAttribute('stroke-width','2.76');svg.appendChild(post);}
+   }
+   const label=document.createElement('span');label.textContent=name||'Pozycja '+(i+1);label.style.fontSize=(14*Number(get('textSize'))/100)+'px';preview.appendChild(label);
+  });
+  if(/[;|]/.test(name)||/[;|]/.test(icon)) invalid=true;
+  output.push([name,get('iconSize'),get('textSize'),custom?icon:(icon?'mdi:'+icon:''),get('active').toUpperCase(),get('inactive').toUpperCase()].join('|'));
+ });
+ const value=(showIcons.checked?(activeOnly.checked?'icons=active;':''):'icons=off;')+'layout='+position.value+';'+output.join(';');document.getElementById('result').value=value;
+ document.getElementById('notice').textContent=invalid ? 'Nazwa i ikona nie mogą zawierać znaków ; ani |.' : (value.length>512 ? 'Za długie ustawienia ('+value.length+'/512). Skróć nazwy lub nazwy ikon.' : value.length+'/512 znaków');
+ document.getElementById('copy').disabled=invalid||value.length>512;
+}
+document.getElementById('load').onclick=()=>{
+ let inputValue=document.getElementById('import').value;
+ showIcons.checked=!inputValue.startsWith('icons=off;');
+ activeOnly.checked=inputValue.startsWith('icons=active;');
+ if(!showIcons.checked) inputValue=inputValue.slice('icons=off;'.length);
+ else if(activeOnly.checked) inputValue=inputValue.slice('icons=active;'.length);
+ const layout=inputValue.match(/^layout=(left|bottom);/);
+ position.value=layout?layout[1]:'bottom';
+ if(layout) inputValue=inputValue.slice(layout[0].length);
+ const config=inputValue.split(';');
+ rows.forEach((row,i)=>{const values=(config[i]||'').split('|');['name','iconSize','textSize','icon','active','inactive'].forEach((key,j)=>{const input=row.querySelector('.'+key);if(key==='name'||key==='icon') input.value=values[j]||'';else if(key==='active'||key==='inactive') input.value=/^#[0-9a-f]{6}$/i.test(values[j]||'')?values[j]:(key==='active'?'#ff4b4b':'#444444');else input.value=Number(values[j])>=50&&Number(values[j])<=200?values[j]:100;});});update();
+};
+document.getElementById('copy').onclick=async()=>{const box=document.getElementById('result');try{await navigator.clipboard.writeText(box.value);document.getElementById('copied').textContent='Skopiowano — wklej do ustawień pluginu.';}catch(_){box.select();document.getElementById('copied').textContent='Zaznaczono tekst — skopiuj Ctrl+C.';}};
+update();
+</script></html>

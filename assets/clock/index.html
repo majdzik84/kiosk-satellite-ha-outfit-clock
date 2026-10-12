@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Zegar HA</title>
+<style>
+html,body{margin:0;background:#000;color:#fff;overflow:hidden;width:100%;height:100%}
+body{display:flex;align-items:center;justify-content:center;font-family:Outfit,sans-serif;-webkit-font-smoothing:antialiased}
+@font-face{font-family:Outfit;src:url(fonts/Outfit.ttf) format('truetype');font-weight:100 900;font-display:block}
+.dashboard{text-align:center;width:100%;max-width:1200px;flex-shrink:0;transform-origin:center}
+.clock{font-size:27vw;font-weight:600;line-height:1;margin-bottom:2vh;white-space:nowrap}
+.one{color:var(--one,#ff0000)}
+.date{font-size:5vw;font-weight:400;text-transform:uppercase;letter-spacing:.15em;color:var(--date,#a0a0a0);white-space:nowrap}
+.divider{width:70%;height:1px;background:linear-gradient(90deg,transparent,#333,#444,#333,transparent);margin:4vh auto 0}
+.weather-container{display:flex;justify-content:center;align-items:center;gap:4vw}
+.weather-icon{width:18vw;height:18vw;display:block;contain:strict;isolation:isolate;backface-visibility:hidden}
+.temp-value{font-size:13vw;font-weight:300;letter-spacing:-.03em;white-space:nowrap}
+.status{min-height:1.3em;font-size:clamp(11px,2vw,20px);color:var(--date,#a0a0a0)}
+.indicators{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2vw;margin:2vh 3vw 0}
+.indicators:empty{display:none}
+.info-item{flex:0 1 16%;min-width:65px;max-width:30%;text-align:center;color:#a0a0a0}
+.info-item.alert{color:#ff4b4b}.info-item.moving{color:#ffbd45}.info-item.active{color:#64b5f6}
+.info-item.unknown{color:#a0a0a0}
+.info-icon{display:block;margin:0 auto .5vh;width:5vw;height:5vw}
+.info-name{color:var(--date,#a0a0a0);font-size:2vw;line-height:1.15;overflow-wrap:anywhere}
+.info-state{font-size:1.5vw;margin-top:.4vh;line-height:1.2;overflow-wrap:anywhere}
+.dashboard.left{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:2vw}
+.dashboard.left .clock-main{grid-column:2;grid-row:1;min-width:0}
+.dashboard.left .indicators{grid-column:1;grid-row:1;flex-direction:column;flex-wrap:nowrap;align-items:center;gap:2vh;margin:0;width:max-content;max-width:18vw}
+.dashboard.left .info-item{flex:none;width:max-content;min-width:0;max-width:100%}
+.dashboard.left .info-name{max-width:18vw}
+@media(max-width:600px){.clock{font-size:30vw}.temp-value{font-size:15vw}}
+</style>
+</head>
+<body>
+<div class="dashboard" id="dashboard">
+ <div class="clock-main" id="clockMain">
+ <div class="clock" id="clock">--:--</div>
+ <div class="date" id="date"></div>
+ <div class="divider"></div>
+ <div class="weather-container">
+  <img class="weather-icon" id="weatherIcon" alt="" width="180" height="180">
+  <span class="temp-value" id="tempValue">— °C</span>
+ </div>
+ <div class="status" id="status" aria-live="polite"></div>
+ </div>
+ <div class="indicators" id="indicators"></div>
+</div>
+<script src="clock.js"></script>
+</body>
+</html>

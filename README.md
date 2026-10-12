@@ -60,8 +60,7 @@ Ikona wybierana jest kolejno: ręczny wybór, atrybut `icon` encji HA (`mdi:...`
 
 W grupie **Ikony informacyjne** wybierz do pięciu encji. Puste pozycje znikają. Zamki pokazują zaryglowanie/odryglowanie, bramy otwarcie/zamknięcie/ruch, a binary_sensor z device_class door/window/opening/garage_door otwarcie. Inne encje pokazują swój stan i ikonę ogólną. Odryglowanie nie oznacza otwarcia drzwi. Brak połączenia lub nieznany stan pokazuje znak zapytania zamiast ostatniego stanu zamka.
 
-SDK ma limit 20 ustawień: pięć wyborów encji jest osobnych, natomiast nazwy i rozmiary są we wspólnym polu **Nazwy i rozmiary pięciu pozycji**. Kolejne pozycje oddziela średnik; każda ma format 
-azwa|rozmiar ikony %|rozmiar podpisu %`, np. `Brama|120|100;Drzwi wejściowe|100|80;Garaż|100|100`. Zakres 50–200%, brak rozmiaru oznacza 100%. Pusta nazwa używa friendly_name z HA. Kolejność fragmentów odpowiada numerom pozycji, także jeśli część encji jest pusta. Nie używaj średnika ani pionowej kreski w nazwach.
+SDK ma limit 20 ustawień: pięć wyborów encji jest osobnych, natomiast nazwy i rozmiary są we wspólnym polu **Nazwy i rozmiary pięciu pozycji**. Kolejne pozycje oddziela średnik; każda ma format `nazwa|rozmiar ikony %|rozmiar podpisu %`, np. `Brama|120|100;Drzwi wejściowe|100|80;Garaż|100|100`. Zakres 50–200%, brak rozmiaru oznacza 100%. Pusta nazwa używa friendly_name z HA. Kolejność fragmentów odpowiada numerom pozycji, także jeśli część encji jest pusta. Nie używaj średnika ani pionowej kreski w nazwach.
 
 Domyślnie zamknięte/zaryglowane/wyłączone są szare, aktywne/otwarte/odryglowane czerwone. Ikony nie sterują urządzeniami. Aktualizacje są scalane do około 15 sekund.
 
@@ -94,5 +93,6 @@ Workflow `.github/workflows/build.yml` buduje tag wydania i publikuje manifest, 
 Kod i interfejsy/narzędzia SDK: Apache-2.0 (LICENSE). Outfit: SIL Open Font License (`assets/clock/fonts/OFL.txt`). Material Design Icons: Pictogrammers/Templarian, Apache-2.0, licencja w `assets/clock/MDI-LICENSE.txt`. Źródła katalogu: repozytoria Templarian/MaterialDesign i Templarian/MaterialDesign-JS; lokalny znormalizowany katalog w resources/mdi/paths.tsv.gz. Ikony pogody dostarczył użytkownik z własnego dashboardu; ich licencja nie została określona. Przed publikacją publiczną należy ustalić prawa do ich dystrybucji.
 
 SDK: https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world
+
 
 
