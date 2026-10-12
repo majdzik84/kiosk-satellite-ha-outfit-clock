@@ -2,6 +2,8 @@
 
 Wygaszacz KioskSatellite SDK 1: zegar HH:mm i polska data (Europe/Warsaw), temperatura HA i lokalne animowane ikony pogody. Czcionka Outfit (300/400/600) jest w paczce. HTML nie pobiera nic z internetu i nie zawiera tokenu HA.
 
+Pobieranie: [ZIP pluginu 1.7.1](https://github.com/majdzik84/kiosk-satellite-ha-outfit-clock/releases/download/v1.7.1/ha-outfit-clock-1.7.1.zip) · [konfigurator offline](https://github.com/majdzik84/kiosk-satellite-ha-outfit-clock/releases/download/v1.7.1/konfigurator-ikon.html) · [wszystkie wydania](https://github.com/majdzik84/kiosk-satellite-ha-outfit-clock/releases).
+
 Dokumentacja: [historia zmian](CHANGELOG.md), [wydanie 1.7.1](docs/RELEASE-1.7.1.md), [współtworzenie](CONTRIBUTING.md).
 
 ## Podgląd
@@ -16,7 +18,7 @@ Ilustracje przedstawiają przykładowy układ; nie są screenshotami z tabletu. 
 
 ## Instalacja
 
-1. W KioskSatellite lub Remote Admin: **Plugin Manager → Developer Tools → Install from ZIP**, wybierz `dist/ha-outfit-clock-1.7.1.zip`. Istniejącą lokalną instalację aktualizuj tym ZIP bez odinstalowywania; ustawienia i wybór trybu pozostają zachowane.
+1. W KioskSatellite lub Remote Admin: **Plugin Manager → Developer Tools → Install from ZIP**, wybierz pobrany plik `ha-outfit-clock-1.7.1.zip` z sekcji Assets wydania. Nie instaluj archiwum „Source code”. Istniejącą lokalną instalację aktualizuj tym ZIP bez odinstalowywania; ustawienia i wybór trybu pozostają zachowane.
 2. Włącz **Zegar HA Outfit** i główny przełącznik pluginów.
 3. W ustawieniach pluginu wybierz encje temperatury, pogody i słońca. Domyślne ID są przykładami — wybierz własne encje. Każdy tablet może mieć własne ustawienia.
 4. **Screensaver → Screensaver mode → Zegar i pogoda (Zegar HA Outfit)**. Dostępny także w harmonogramie.
